@@ -17,6 +17,10 @@ class Type
 
 
     public function __construct(string $name, ?array $subTypes = []) {
+        foreach ($subTypes as $type) {
+            // kinda hacky way to trigger \TypeError, without IDE screaming about unhandled Exception
+            $this->typeCheck($type);
+        }
         $this->name = $name;
         $this->subTypes = $subTypes;
     }
@@ -48,6 +52,10 @@ class Type
 
     public function __toString() {
         return $this->getName() . ($this->getSubTypes() ? "<" . \implode(", ", \array_map("strval", $this->getSubTypes())) . ">" : "");
+    }
+
+    private function typeCheck(Type $type) {
+        // noop
     }
 
 }

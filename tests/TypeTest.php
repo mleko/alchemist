@@ -39,4 +39,11 @@ class TypeTest extends TestCase
         $this->assertEquals("string", $type->getSubTypes()[1]->getSubTypes()[1]->getName());
         $this->assertEquals("Map<string, Map<string, string>>", $type->__toString());
     }
+
+    /**
+     * @expectedException \TypeError
+     */
+    public function testInvalidSubType() {
+        new Type("int", ["int"]);
+    }
 }

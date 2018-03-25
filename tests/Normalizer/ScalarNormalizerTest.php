@@ -30,6 +30,6 @@ class ScalarNormalizerTest extends TestCase
 
         $this->assertFalse($normalizer->canProcess(new Type("Mleko\\Alchemist\\Serializer"), "*"));
         $this->assertFalse($normalizer->canProcess(new Type("array"), "*"));
-        $this->assertFalse($normalizer->canProcess(new Type("int", ["string"]), "*"));
+        $this->assertFalse($normalizer->canProcess(new Type("int", [new Type("string")]), "*"));
     }
 }
