@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Mleko\Alchemist\Test\Normalizer;
 
+use Mleko\Alchemist\Normalizer\ArrayNormalizer;
 use Mleko\Alchemist\Normalizer\ChainNormalizer;
 use Mleko\Alchemist\Normalizer\ScalarNormalizer;
 use Mleko\Alchemist\Type;
@@ -44,5 +45,16 @@ class ChainNormalizerTest extends TestCase
     public function testDenormalizeNotFoundNormalizer() {
         $normalizer = new ChainNormalizer([]);
         $this->assertEquals(123, $normalizer->denormalize(123, new Type("int"), "*"));
+    }
+
+    public function testChainingChains() {
+        $chain1 = new ChainNormalizer([new ScalarNormalizer()]);
+        $chain2 = new ChainNormalizer([new ArrayNormalizer()]);
+        $chain = new ChainNormalizer([$chain1, $chain2]);
+
+        $this->assertEquals(
+            [[1]],
+            $chain->normalize(new \ArrayObject([new \ArrayObject([1])]), "*")
+        );
     }
 }

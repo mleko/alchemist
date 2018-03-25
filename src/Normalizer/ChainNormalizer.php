@@ -8,7 +8,7 @@ use Mleko\Alchemist\Exception\NormalizerNotFound;
 use Mleko\Alchemist\Normalizer;
 use Mleko\Alchemist\Type;
 
-class ChainNormalizer implements Normalizer
+class ChainNormalizer implements Normalizer, NormalizerAware
 {
     /** @var Normalizer[] */
     private $normalizers = [];
@@ -48,6 +48,14 @@ class ChainNormalizer implements Normalizer
 
     public function canProcess(Type $type, string $format): bool {
         return null !== $this->findTypeFormatNormalizer($type, $format);
+    }
+
+    public function setNormalizer(Normalizer $subNormalizer): void {
+        foreach ($this->normalizers as $normalizer) {
+            if ($normalizer instanceof NormalizerAware) {
+                $normalizer->setNormalizer($subNormalizer);
+            }
+        }
     }
 
     private function findTypeFormatNormalizer(Type $type, string $format): ?Normalizer {
