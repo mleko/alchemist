@@ -16,7 +16,7 @@ class NormalizerNotFound extends \RuntimeException
     public function __construct(Type $type, string $format) {
         $this->type = $type;
         $this->format = $format;
-        parent::__construct(sprintf("Not found normalizer for type[%s] format[%s]", $type, $format));
+        parent::__construct(sprintf("Not found normalizer for type %s, format %s", $type, $format));
     }
 
     public function getType(): Type {

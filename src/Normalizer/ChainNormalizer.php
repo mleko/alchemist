@@ -18,7 +18,9 @@ class ChainNormalizer implements Normalizer
      * @param Normalizer[] $normalizers
      */
     public function __construct(array $normalizers) {
-        $this->normalizers = $normalizers;
+        foreach ($normalizers as $normalizer) {
+            $this->addNormalizer($normalizer);
+        }
     }
 
     /**
@@ -55,6 +57,13 @@ class ChainNormalizer implements Normalizer
             }
         }
         return null;
+    }
+
+    private function addNormalizer(Normalizer $normalizer) {
+        if ($normalizer instanceof NormalizerAware) {
+            $normalizer->setNormalizer($this);
+        }
+        array_unshift($this->normalizers, $normalizer);
     }
 
 }

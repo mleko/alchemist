@@ -36,7 +36,7 @@ class BasicSerializer implements Serializer
 
     public function unserialize(string $data, Type $type, string $format, array $context = []) {
         return $this->normalizer->denormalize(
-            $this->normalizer->denormalize($data, $type, $format, $context),
+            $this->encoder->decode($data, $format, $context),
             $type,
             $format,
             $context
