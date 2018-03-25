@@ -5,6 +5,7 @@ namespace Mleko\Alchemist\Test\Normalizer;
 
 use Mleko\Alchemist\Normalizer\ChainNormalizer;
 use Mleko\Alchemist\Normalizer\ScalarNormalizer;
+use Mleko\Alchemist\Type;
 use PHPUnit\Framework\TestCase;
 
 class ChainNormalizerTest extends TestCase
@@ -17,16 +18,16 @@ class ChainNormalizerTest extends TestCase
 
     public function testDenormalize() {
         $normalizer = new ChainNormalizer([new ScalarNormalizer()]);
-        $this->assertEquals(123, $normalizer->denormalize(123, "int", "*"));
+        $this->assertEquals(123, $normalizer->denormalize(123, new Type("int"), "*"));
     }
 
     public function testCanProcess() {
         $normalizer = new ChainNormalizer([new ScalarNormalizer()]);
 
-        $this->assertTrue($normalizer->canProcess("int", "*"));
-        $this->assertTrue($normalizer->canProcess("string", "*"));
+        $this->assertTrue($normalizer->canProcess(new Type("int"), "*"));
+        $this->assertTrue($normalizer->canProcess(new Type("string"), "*"));
 
-        $this->assertFalse($normalizer->canProcess("UnknownClass", "*"));
+        $this->assertFalse($normalizer->canProcess(new Type("UnknownClass"), "*"));
     }
 
     /**
@@ -42,6 +43,6 @@ class ChainNormalizerTest extends TestCase
      */
     public function testDenormalizeNotFoundNormalizer() {
         $normalizer = new ChainNormalizer([]);
-        $this->assertEquals(123, $normalizer->denormalize(123, "int", "*"));
+        $this->assertEquals(123, $normalizer->denormalize(123, new Type("int"), "*"));
     }
 }

@@ -7,6 +7,7 @@ namespace Mleko\Alchemist\Serializer;
 use Mleko\Alchemist\Encoder;
 use Mleko\Alchemist\Normalizer;
 use Mleko\Alchemist\Serializer;
+use Mleko\Alchemist\Type;
 
 class BasicSerializer implements Serializer
 {
@@ -33,7 +34,7 @@ class BasicSerializer implements Serializer
         );
     }
 
-    public function unserialize(string $data, string $type, string $format, array $context = []) {
+    public function unserialize(string $data, Type $type, string $format, array $context = []) {
         return $this->normalizer->denormalize(
             $this->normalizer->denormalize($data, $type, $format, $context),
             $type,

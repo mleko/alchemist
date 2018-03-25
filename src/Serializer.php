@@ -8,5 +8,5 @@ interface Serializer
 {
     public function serialize($value, string $format, array $context = []): string;
 
-    public function unserialize(string $data, string $type, string $format, array $context = []);
+    public function unserialize(string $data, Type $type, string $format, array $context = []);
 }

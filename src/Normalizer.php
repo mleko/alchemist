@@ -16,12 +16,12 @@ interface Normalizer
 
     /**
      * @param array|integer|double|string|boolean|null $data
-     * @param string $type
+     * @param Type $type
      * @param string $format
      * @param array $context
      * @return mixed
      */
-    public function denormalize($data, string $type, string $format, array $context = []);
+    public function denormalize($data, Type $type, string $format, array $context = []);
 
-    public function canProcess(string $type, string $format): bool;
+    public function canProcess(Type $type, string $format): bool;
 }
