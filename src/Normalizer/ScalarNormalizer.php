@@ -10,21 +10,14 @@ class ScalarNormalizer implements Normalizer
 {
 
     /**
-     * @param mixed $value
-     * @param string $format
-     * @param array $context
-     * @return array|integer|double|string|boolean|null
+     * @inheritdoc
      */
     public function normalize($value, string $format, array $context = []) {
         return $value;
     }
 
     /**
-     * @param array|integer|double|string|boolean|null $data
-     * @param string $type
-     * @param string $format
-     * @param array $context
-     * @return mixed
+     * @inheritdoc
      */
     public function denormalize($data, string $type, string $format, array $context = []) {
         return $data;
