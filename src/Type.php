@@ -15,7 +15,7 @@ namespace Mleko\Alchemist;
 class Type
 {
 
-    private const PATTERN = "#^(?P<generic>(?P<baseType>(([a-zA-Z]+)|((\\\\[a-zA-Z_][a-zA-Z0-9_]*)+)))(<(?P<genericList>((?&generic)(\\s*,\\s*(?&generic))*))>)?)$#";
+    private const PATTERN = "#^(?P<generic>(?P<baseType>(?:(?:[a-zA-Z_]+)(?:(?:\\\\[a-zA-Z0-9_]+)*)))(?:<(?P<genericList>(?:\\s*(?&generic)(?:\\s*,\\s*(?&generic))*))\\s*>)?)$#";
 
     /** @var string */
     private $name;
@@ -23,8 +23,12 @@ class Type
     /** @var Type[] */
     private $subTypes;
 
-
-    public function __construct(string $name, ?array $subTypes = []) {
+    /**
+     * Type constructor.
+     * @param string $name
+     * @param Type[] $subTypes
+     */
+    public function __construct(string $name, array $subTypes = []) {
         foreach ($subTypes as $type) {
             // kinda hacky way to trigger \TypeError, without IDE screaming about unhandled Exception
             $this->typeCheck($type);

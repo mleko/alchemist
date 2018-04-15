@@ -46,4 +46,12 @@ class TypeTest extends TestCase
     public function testInvalidSubType() {
         new Type("int", ["int"]);
     }
+
+    public function testNamespacedClass() {
+        $type = Type::fromString("array<Mleko\\Alchemist\\Type>");
+
+        $this->assertEquals("array", $type->getName());
+        $this->assertCount(1, $type->getSubTypes());
+        $this->assertEquals("Mleko\\Alchemist\\Type", $type->getSubTypes()[0]->getName());
+    }
 }
