@@ -16,6 +16,7 @@ class Type
 {
 
     private const PATTERN = "#^(?P<generic>(?P<baseType>(?:(?:[a-zA-Z_]+)(?:(?:\\\\[a-zA-Z0-9_]+)*)))(?:<(?P<genericList>(?:\\s*(?&generic)(?:\\s*,\\s*(?&generic))*))\\s*>)?)$#";
+    private const OPEN_PATTERN = "#^(?P<generic>(?P<baseType>(?:(?:[a-zA-Z_]+)(?:(?:\\\\[a-zA-Z0-9_]+)*)))(?:<(?P<genericList>(?:\\s*(?&generic)(?:\\s*,\\s*(?&generic))*))\\s*>)?)#";
 
     /** @var string */
     private $name;
@@ -41,14 +42,34 @@ class Type
         if (1 !== \preg_match(self::PATTERN, $type, $matches)) {
             throw new \InvalidArgumentException("Malformed type provided: " . $type);
         }
-        $generics = isset($matches['genericList']) ? $matches['genericList'] : '';
-        $generics = \array_filter(\explode(",", $generics));
+        $generics = [];
+        if(isset($matches['genericList'])) {
+            $generics = self::parseGenericList(trim($matches['genericList']));
+        }
 
-        return new Type($matches['baseType'], array_map([Type::class, "fromString"], $generics));
+        return new Type($matches['baseType'], $generics);
     }
 
     public static function fromValue($value): Type {
         return new Type(is_object($value) ? get_class($value) : gettype($value));
+    }
+
+    private static function parseGenericList($genericList) {
+        $generics = [];
+        while($genericList) {
+            if (1 !== \preg_match(self::OPEN_PATTERN, $genericList, $matches)) {
+                throw new \InvalidArgumentException("Malformed subType provided: " . $genericList);
+            }
+            $generics[] = self::fromString($matches["generic"]);
+            $genericList = ltrim(substr($genericList, strlen($matches["generic"])));
+            if ($genericList) {
+                if (\substr($genericList, 0, 1) !== ",") {
+                    throw new \InvalidArgumentException("Malformed subType provided: " . $genericList);
+                }
+                $genericList = ltrim(\substr($genericList, 1));
+            }
+        }
+        return $generics;
     }
 
     public function getName(): string {
